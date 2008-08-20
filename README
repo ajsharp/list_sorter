@@ -1,0 +1,35 @@
+ListSorter
+==========
+
+This plugin is an adapted version of Recipe 5 of Chad Fowler's Rails Recipes.
+
+ListSorter provides a common interface to sort ActiveRecord models you're representing via html lists (<ul> or <ol>) in your view templates.
+
+There are two methods in the ListSorter module.
+
+collection_sort - This method sorts a collection of one AR object's child models. I originally used it to sort a Product's photos. 
+
+Requirements
+============
+1. Scriptaculous
+3. acts_as_list plugin (or possibly some derivative of this, though I haven't tested any others so I can't be sure)
+
+
+Example
+=======
+
+In your view:
+
+<ul id="photos">
+	<li id="<%= dom_id(photo) %>">
+		<%= image_tag photo.image.url(:thumb) %>
+	</li>
+</ul>
+
+<%= sortable_element 'photos', 
+	:url => sort_path(:id => @product.id, :parent => "product", :children => "photos"), 
+	:complete => visual_effect(:highlight, 'photos') %>
+	
+
+
+Copyright (c) 2008 Alex Sharp, released under the MIT license
