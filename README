@@ -18,6 +18,34 @@ Requirements
 Example
 =======
 
+In your models:
+
+class Product < ActiveRecord::Base
+	has_many :photos, :order => :position
+end
+
+class Photo < ActiveRecord::Base
+	acts_as_list :scope => :product
+end
+
+
+In your controller:
+
+class ProductsController < ActionController::Base
+
+	def sort
+    ProductsController.class_eval { include ListSorter }
+    collection_sort(params)
+    render :nothing => true
+  end
+end
+
+
+In routes.rb:
+
+map.sort "products/sort/:id/:parent/:children", :controller => 'products', :action => 'sort'
+
+
 In your view:
 
 <ul id="photos">
@@ -30,6 +58,8 @@ In your view:
 	:url => sort_path(:id => @product.id, :parent => "product", :children => "photos"), 
 	:complete => visual_effect(:highlight, 'photos') %>
 	
+
+
 
 
 Copyright (c) 2008 Alex Sharp, released under the MIT license
