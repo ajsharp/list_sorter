@@ -11,7 +11,7 @@ collection_sort - This method sorts a collection of one AR object's child models
 
 Requirements
 ============
-1. Scriptaculous
+1. Prototype + Scriptaculous
 3. acts_as_list plugin (or possibly some derivative of this, though I haven't tested any others so I can't be sure)
 
 
@@ -19,7 +19,7 @@ Example
 =======
 
 In your models:
-
+<pre>
 class Product < ActiveRecord::Base
 	has_many :photos, :order => :position
 end
@@ -27,17 +27,21 @@ end
 class Photo < ActiveRecord::Base
 	acts_as_list :scope => :product
 end
-
+</pre>
 
 In your controller:
 
 class ProductsController < ActionController::Base
-
-	def sort
-    ProductsController.class_eval { include ListSorter }
-    collection_sort(params)
-    render :nothing => true
-  end
+  sort_list 'bios'
+  
+  private
+    def index
+      bios = sortable_list
+    end
+  
+    def sortable_list
+      Products.all(:order => 'position')
+    end
 end
 
 
